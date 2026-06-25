@@ -83,7 +83,7 @@ const photoSlides = [
 
 const videoSlides = [
   { src: videoFeatured, poster: videoPosters.featured, label: 'Moving Memory I',   caption: 'This one makes me smile.' },
-  { src: videoSecond,   poster: videoPosters.second,   label: 'Moving Memory II',  caption: 'Just one of those moments.' },
+  { src: videoSecond,   poster: videoPosters.second,   label: 'Moving Memory II',  caption: 'Just one of those moments.', landscape: true },
   { src: videoThird,    poster: videoPosters.third,    label: 'Moving Memory III', caption: 'only God knows what you were trying to do here 😂' },
 ];
 
@@ -611,7 +611,7 @@ function App() {
           onTouchStart={onVideoTouchStart}
           onTouchEnd={onVideoTouchEnd}
         >
-          <div className={`${styles.slideStage} ${styles.videoStage}`}>
+          <div className={`${styles.slideStage} ${styles.videoStage} ${activeVideo.landscape ? styles.videoStageLandscape : ''}`}>
             <AnimatePresence mode="wait" custom={videoDir}>
               <motion.figure
                 key={activeVideoIndex}
