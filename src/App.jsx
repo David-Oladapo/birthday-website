@@ -66,19 +66,19 @@ const videoPosters = {
 };
 
 const photoSlides = [
-  { image: photoArcade,    alt: 'Ifedolapo by the arcade lights',       caption: 'Main character energy', mobileFocus: '50% 22%' },
-  { image: photoSmile,     alt: 'Ifedolapo smiling brightly',           caption: 'That smile should honestly come with a warning.', mobileFocus: '50% 24%' },
+  { image: photoArcade,    alt: 'Ifedolapo by the arcade lights',       caption: 'Main character energy', mobileFocus: '50% 38%' },
+  { image: photoSmile,     alt: 'Ifedolapo smiling brightly',           caption: 'That smile should honestly come with a warning.', mobileFocus: '50% 40%' },
   { image: photoSoft,      alt: 'Black and white portrait of Ifedolapo', caption: 'Soft, calm, and completely unforgettable.' },
-  { image: photoBlue,      alt: 'Ifedolapo in blue beside greenery',    caption: 'This picture feels so peaceful.', mobileFocus: '58% 24%' },
-  { image: photoThroat,    alt: 'A playful call screenshot with Ifedolapo', caption: 'longest throat 😂', mobileFocus: '50% 22%' },
-  { image: photoBeautiful, alt: 'Ifedolapo in a cap',                   caption: 'just straight up beautiful', mobileFocus: '50% 18%' },
+  { image: photoBlue,      alt: 'Ifedolapo in blue beside greenery',    caption: 'This picture feels so peaceful.', mobileFocus: '58% 42%' },
+  { image: photoThroat,    alt: 'A playful call screenshot with Ifedolapo', caption: 'longest throat 😂', mobileFocus: '50% 78%' },
+  { image: photoBeautiful, alt: 'Ifedolapo in a cap',                   caption: 'just straight up beautiful', mobileFocus: '50% 36%' },
   { image: photoMoods,     alt: 'A collage of Ifedolapo poses',         caption: 'Every frame is a different mood.' },
   { image: photoFilm,      alt: 'Film strip style portraits of Ifedolapo', caption: 'You make random pictures look intentional.' },
-  { image: photoSun,       alt: 'Ifedolapo in sunlight',                caption: 'Sunlight did its thing here.', mobileFocus: '50% 20%' },
+  { image: photoSun,       alt: 'Ifedolapo in sunlight',                caption: 'Sunlight did its thing here.', mobileFocus: '50% 38%' },
   { image: photoCute,      alt: 'Close-up portrait of Ifedolapo',       caption: 'This one is just really cute.' },
-  { image: photoSexy,      alt: 'Ifedolapo in purple light',            caption: 'looking all sexy for no reasonnn', mobileFocus: '50% 18%' },
-  { image: photoLockedIn,  alt: 'Ifedolapo holding study notes',        caption: 'Pretty and locked in.', mobileFocus: '50% 24%' },
-  { image: photoCall,      alt: 'A video call screenshot with Ifedolapo', caption: 'Even a call with you feels like a memory.', mobileFocus: '50% 28%' },
+  { image: photoSexy,      alt: 'Ifedolapo in purple light',            caption: 'looking all sexy for no reasonnn', mobileFocus: '50% 40%' },
+  { image: photoLockedIn,  alt: 'Ifedolapo holding study notes',        caption: 'Pretty and locked in.', mobileFocus: '50% 44%' },
+  { image: photoCall,      alt: 'A video call screenshot with Ifedolapo', caption: 'Even a call with you feels like a memory.', mobileFocus: '50% 74%' },
 ];
 
 const videoSlides = [
