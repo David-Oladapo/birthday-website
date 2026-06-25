@@ -105,7 +105,11 @@ const reveal = (shouldReduceMotion, delay = 0) => ({
 
 const getPreviousIndex = (i, n) => (i - 1 + n) % n;
 const getNextIndex    = (i, n) => (i + 1) % n;
+const getWrappedIndex  = (i, n) => ((i % n) + n) % n;
+const getRelativeIndex = (i, delta, n) => getWrappedIndex(i + delta, n);
 const formatSlideNumber = (i) => String(i + 1).padStart(2, '0');
+
+const photoStackOffsets = [-2, -1, 0, 1];
 
 /* â”€â”€â”€ Arrow SVG icons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const ArrowLeft = () => (
@@ -502,56 +506,63 @@ function App() {
           onMouseEnter={() => setPhotoPaused(true)}
           onMouseLeave={() => setPhotoPaused(false)}
         >
-          <AnimatePresence mode="wait" custom={photoDir}>
-            <motion.figure
-              key={activePhotoIndex}
-              className={styles.photoCard}
-              custom={photoDir}
-              variants={photoSlideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              layout
-            >
-              {/* Progress bar */}
-              {!shouldReduceMotion && (
-                <PhotoProgressBar
-                  progressKey={photoProgressKey}
-                  paused={photoPaused}
-                  onComplete={handlePhotoProgressComplete}
-                />
-              )}
+          <motion.figure className={styles.photoCard} layout>
+            {/* Progress bar */}
+            {!shouldReduceMotion && (
+              <PhotoProgressBar
+                progressKey={photoProgressKey}
+                paused={photoPaused}
+                onComplete={handlePhotoProgressComplete}
+              />
+            )}
 
-              <div className={styles.photoCanvas}>
-                {/* Blurred backdrop keeps the card full even when the image is fully contained */}
-                <AnimatePresence mode="sync">
-                  <motion.img
-                    key={`backdrop-${activePhotoIndex}`}
-                    className={styles.photoBackdrop}
-                    src={activePhoto.image}
-                    alt=""
-                    aria-hidden="true"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 0.72 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.7, ease: 'easeInOut' }}
-                  />
-                </AnimatePresence>
+            <div className={styles.photoDeck} aria-label="Stacked photo deck">
+              <AnimatePresence initial={false}>
+                {photoStackOffsets.map((offset) => {
+                  const index = getRelativeIndex(activePhotoIndex, offset, photoSlides.length);
+                  const photo = photoSlides[index];
+                  const isActive = offset === 0;
 
-                <img
-                  className={styles.photoImage}
-                  src={activePhoto.image}
-                  alt={activePhoto.alt}
-                  fetchpriority={activePhotoIndex === 0 ? "high" : "auto"}
-                  loading={activePhotoIndex === 0 ? "eager" : "lazy"}
-                />
-              </div>
+                  return (
+                    <motion.figure
+                      key={index}
+                      className={styles.photoStackCard}
+                      style={{ zIndex: 20 - Math.abs(offset) }}
+                      initial={{ opacity: 0, scale: 0.88, y: 22 }}
+                      animate={{
+                        opacity: isActive ? 1 : 0.65 - Math.abs(offset) * 0.06,
+                        x: offset * 18,
+                        y: Math.abs(offset) * 14,
+                        scale: isActive ? 1 : 1 - Math.abs(offset) * 0.055,
+                        rotate: offset * 3.2,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        x: offset * 26,
+                        y: 34,
+                        scale: 0.88,
+                        rotate: offset * 4,
+                      }}
+                      transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                      <img
+                        className={styles.photoImage}
+                        src={photo.image}
+                        alt={isActive ? photo.alt : ''}
+                        aria-hidden={!isActive}
+                        fetchpriority={isActive ? 'high' : 'auto'}
+                        loading={isActive ? 'eager' : 'lazy'}
+                      />
+                    </motion.figure>
+                  );
+                })}
+              </AnimatePresence>
+            </div>
 
-              <figcaption className={styles.photoCaption}>
-                <span>{activePhoto.caption}</span>
-              </figcaption>
-            </motion.figure>
-          </AnimatePresence>
+            <figcaption className={styles.photoCaption}>
+              <span>{activePhoto.caption}</span>
+            </figcaption>
+          </motion.figure>
 
           {/* Controls */}
           <div className={styles.slideshowControls}>

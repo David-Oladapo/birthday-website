@@ -265,90 +265,84 @@
 
 .slideshow {
   display: grid;
-  gap: 1rem;
-  width: min(100%, 780px);
+  gap: 0.95rem;
+  width: min(100%, 840px);
   margin: 0 auto;
 }
 
 .photoCard {
   position: relative;
-  isolation: isolate;
   display: grid;
-  overflow: hidden;
-  gap: 1rem;
-  padding: clamp(0.85rem, 2vw, 1.15rem);
-  border: 1px solid rgba(226, 212, 247, 0.2);
-  border-radius: clamp(1.45rem, 3vw, 2.5rem);
-  background:
-    linear-gradient(145deg, rgba(22, 15, 42, 0.92), rgba(13, 10, 20, 0.94)),
-    #160f2a;
-  box-shadow:
-    inset 0 0 46px rgba(226, 212, 247, 0.08),
-    0 32px 92px rgba(0, 0, 0, 0.45);
+  gap: 0.78rem;
+  margin: 0;
+  padding: 0;
+  background: transparent;
 }
 
-.photoCard::before {
+.photoDeck {
+  position: relative;
+  display: grid;
+  grid-template-areas: 'stack';
+  justify-items: center;
+  align-items: start;
+  overflow: visible;
+  min-height: min(68svh, 760px);
+  padding: clamp(0.35rem, 1vw, 0.75rem);
+}
+
+.photoDeck::before {
   position: absolute;
-  inset: 0.65rem;
-  z-index: 0;
+  inset: 12% 8% auto;
+  height: 72%;
   content: '';
   pointer-events: none;
-  border: 1px solid rgba(245, 240, 255, 0.08);
-  border-radius: calc(clamp(1.45rem, 3vw, 2.5rem) - 0.5rem);
-  box-shadow: inset 0 0 36px rgba(201, 184, 232, 0.07);
+  border-radius: 999px;
+  background: radial-gradient(ellipse at center, rgba(201, 184, 232, 0.12), transparent 68%);
+  filter: blur(24px);
+  opacity: 0.7;
 }
 
-.photoCanvas {
+.photoStackCard {
+  grid-area: stack;
   position: relative;
-  z-index: 1;
-  isolation: isolate;
-  display: grid;
-  place-items: center;
+  width: min(100%, 760px);
+  margin: 0;
+  padding: clamp(0.45rem, 1.1vw, 0.75rem);
   overflow: hidden;
-  min-height: min(72svh, 760px);
-  padding: clamp(0.85rem, 2vw, 1.25rem);
-  border-radius: clamp(1.1rem, 2.5vw, 1.9rem);
+  border: 1px solid rgba(226, 212, 247, 0.18);
+  border-radius: clamp(1.15rem, 2.4vw, 2rem);
   background:
-    radial-gradient(circle at 50% 22%, rgba(226, 212, 247, 0.12), transparent 44%),
-    linear-gradient(160deg, rgba(13, 10, 20, 0.2), rgba(22, 15, 42, 0.55));
+    linear-gradient(160deg, rgba(22, 15, 42, 0.86), rgba(13, 10, 20, 0.9)),
+    rgba(13, 10, 20, 0.88);
+  box-shadow:
+    inset 0 0 0 1px rgba(245, 240, 255, 0.03),
+    0 24px 56px rgba(0, 0, 0, 0.34);
 }
 
-.photoCanvas::after {
+.photoStackCard::before {
   position: absolute;
   inset: 0;
+  z-index: 1;
   content: '';
   pointer-events: none;
   border: 1px solid rgba(245, 240, 255, 0.08);
   border-radius: inherit;
-  box-shadow: inset 0 0 36px rgba(201, 184, 232, 0.08);
-}
-
-.photoBackdrop {
-  position: absolute;
-  inset: -10%;
-  z-index: -1;
-  width: 120%;
-  height: 120%;
-  object-fit: cover;
-  filter: blur(30px) saturate(1.08) brightness(0.6);
-  transform: scale(1.08);
+  box-shadow: inset 0 0 28px rgba(201, 184, 232, 0.06);
 }
 
 .photoImage {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: block;
-  width: auto;
+  width: 100%;
   height: auto;
   max-width: 100%;
-  max-height: min(64svh, 640px);
-  margin: 0 auto;
+  max-height: min(66svh, 700px);
+  margin: 0;
   border: 0;
-  border-radius: clamp(1rem, 2vw, 1.65rem);
-  background: rgba(13, 10, 20, 0.18);
-  box-shadow:
-    0 20px 52px rgba(0, 0, 0, 0.34),
-    0 0 0 1px rgba(245, 240, 255, 0.06);
+  border-radius: calc(clamp(1.15rem, 2.4vw, 2rem) - 0.2rem);
+  background: transparent;
+  box-shadow: none;
   object-fit: contain;
   object-position: center center;
   filter: saturate(1.02) contrast(1.02);
@@ -357,21 +351,16 @@
 
 .photoCaption {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   display: block;
   margin: 0;
-  padding: clamp(0.88rem, 2vw, 1.05rem) clamp(0.95rem, 2.2vw, 1.15rem);
-  border: 1px solid rgba(226, 212, 247, 0.15);
-  border-radius: 1.15rem;
-  color: rgba(245, 240, 255, 0.95);
-  font-size: clamp(0.92rem, 1.55vw, 1.02rem);
-  font-weight: 800;
+  padding: 0.85rem 1rem 0;
+  color: rgba(245, 240, 255, 0.96);
+  font-size: clamp(0.92rem, 1.5vw, 1rem);
+  font-weight: 700;
   line-height: 1.45;
   letter-spacing: -0.01em;
-  background: linear-gradient(135deg, rgba(13, 10, 20, 0.72), rgba(22, 15, 42, 0.45));
-  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
-  text-shadow: 0 2px 18px rgba(13, 10, 20, 0.82);
-  backdrop-filter: blur(16px);
+  text-shadow: 0 2px 16px rgba(13, 10, 20, 0.8);
 }
 
 .photoCaption span {
@@ -848,16 +837,12 @@
     font-size: clamp(4rem, 18vw, 8rem);
   }
 
-  .slideStage {
-    aspect-ratio: 4 / 5;
-  }
-
-  .photoCanvas {
-    min-height: min(68svh, 700px);
+  .photoDeck {
+    min-height: min(64svh, 680px);
   }
 
   .photoImage {
-    max-height: min(60svh, 600px);
+    max-height: min(62svh, 620px);
   }
 
   .videoStage {
@@ -923,31 +908,22 @@
   }
 
   .photoCard {
-    gap: 0.85rem;
-    padding: 0.7rem;
-    border-radius: 1.35rem;
+    gap: 0.55rem;
   }
 
-  .photoCard::before {
-    inset: 0.45rem;
-    border-radius: 1rem;
-  }
-
-  .photoCanvas {
-    min-height: min(56svh, 520px);
-    padding: 0.7rem;
-    border-radius: 1rem;
+  .photoDeck {
+    min-height: min(56svh, 560px);
+    padding: 0.15rem;
   }
 
   .photoImage {
-    max-height: min(52svh, 500px);
+    max-height: min(54svh, 520px);
   }
 
   .photoCaption {
-    padding: 0.85rem 0.9rem;
-    border-radius: 1rem;
-    font-size: 0.88rem;
-    line-height: 1.35;
+    padding: 0.7rem 0.1rem 0;
+    font-size: 0.85rem;
+    line-height: 1.28;
   }
 
   .videoStage {
