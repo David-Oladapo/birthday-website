@@ -864,6 +864,11 @@
     border-radius: 1rem;
   }
 
+  .slideImage {
+    object-fit: cover;
+    object-position: center center;
+  }
+
   .slideFigure,
   .videoStage .slideFigure {
     padding: 0;
