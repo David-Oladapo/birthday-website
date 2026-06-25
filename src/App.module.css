@@ -866,7 +866,7 @@
 
   .slideImage {
     object-fit: cover;
-    object-position: center center;
+    object-position: var(--mobile-focus, center center);
   }
 
   .slideFigure,

@@ -66,19 +66,19 @@ const videoPosters = {
 };
 
 const photoSlides = [
-  { image: photoArcade,    alt: 'Ifedolapo by the arcade lights',       caption: 'Main character energy' },
-  { image: photoSmile,     alt: 'Ifedolapo smiling brightly',           caption: 'That smile should honestly come with a warning.' },
+  { image: photoArcade,    alt: 'Ifedolapo by the arcade lights',       caption: 'Main character energy', mobileFocus: '50% 22%' },
+  { image: photoSmile,     alt: 'Ifedolapo smiling brightly',           caption: 'That smile should honestly come with a warning.', mobileFocus: '50% 24%' },
   { image: photoSoft,      alt: 'Black and white portrait of Ifedolapo', caption: 'Soft, calm, and completely unforgettable.' },
-  { image: photoBlue,      alt: 'Ifedolapo in blue beside greenery',    caption: 'This picture feels so peaceful.' },
-  { image: photoThroat,    alt: 'A playful call screenshot with Ifedolapo', caption: 'longest throat 😂' },
-  { image: photoBeautiful, alt: 'Ifedolapo in a cap',                   caption: 'just straight up beautiful' },
+  { image: photoBlue,      alt: 'Ifedolapo in blue beside greenery',    caption: 'This picture feels so peaceful.', mobileFocus: '58% 24%' },
+  { image: photoThroat,    alt: 'A playful call screenshot with Ifedolapo', caption: 'longest throat 😂', mobileFocus: '50% 22%' },
+  { image: photoBeautiful, alt: 'Ifedolapo in a cap',                   caption: 'just straight up beautiful', mobileFocus: '50% 18%' },
   { image: photoMoods,     alt: 'A collage of Ifedolapo poses',         caption: 'Every frame is a different mood.' },
   { image: photoFilm,      alt: 'Film strip style portraits of Ifedolapo', caption: 'You make random pictures look intentional.' },
-  { image: photoSun,       alt: 'Ifedolapo in sunlight',                caption: 'Sunlight did its thing here.' },
+  { image: photoSun,       alt: 'Ifedolapo in sunlight',                caption: 'Sunlight did its thing here.', mobileFocus: '50% 20%' },
   { image: photoCute,      alt: 'Close-up portrait of Ifedolapo',       caption: 'This one is just really cute.' },
-  { image: photoSexy,      alt: 'Ifedolapo in purple light',            caption: 'looking all sexy for no reasonnn' },
-  { image: photoLockedIn,  alt: 'Ifedolapo holding study notes',        caption: 'Pretty and locked in.' },
-  { image: photoCall,      alt: 'A video call screenshot with Ifedolapo', caption: 'Even a call with you feels like a memory.' },
+  { image: photoSexy,      alt: 'Ifedolapo in purple light',            caption: 'looking all sexy for no reasonnn', mobileFocus: '50% 18%' },
+  { image: photoLockedIn,  alt: 'Ifedolapo holding study notes',        caption: 'Pretty and locked in.', mobileFocus: '50% 24%' },
+  { image: photoCall,      alt: 'A video call screenshot with Ifedolapo', caption: 'Even a call with you feels like a memory.', mobileFocus: '50% 28%' },
 ];
 
 const videoSlides = [
@@ -537,7 +537,14 @@ function App() {
                 animate="center"
                 exit="exit"
               >
-                <img className={styles.slideImage} src={activePhoto.image} alt={activePhoto.alt} fetchpriority={activePhotoIndex === 0 ? "high" : "auto"} loading={activePhotoIndex === 0 ? "eager" : "lazy"} />
+                <img
+                  className={styles.slideImage}
+                  src={activePhoto.image}
+                  alt={activePhoto.alt}
+                  style={activePhoto.mobileFocus ? { '--mobile-focus': activePhoto.mobileFocus } : undefined}
+                  fetchpriority={activePhotoIndex === 0 ? "high" : "auto"}
+                  loading={activePhotoIndex === 0 ? "eager" : "lazy"}
+                />
                 <figcaption className={styles.slideCaption}>
                   <span>{activePhoto.caption}</span>
                 </figcaption>
