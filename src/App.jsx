@@ -345,6 +345,15 @@ function App() {
     goToVideo(getNextIndex(activeVideoIndex, videoSlides.length), 1);
   }, [activeVideoIndex, goToVideo]);
 
+  /* ── Video 3: skip last 4 seconds ───────── */
+  const handleVideoTimeUpdate = useCallback((e) => {
+    if (activeVideoIndex !== 2) return;
+    const video = e.currentTarget;
+    if (video.duration && video.currentTime >= video.duration - 4) {
+      goToVideo(getNextIndex(activeVideoIndex, videoSlides.length), 1);
+    }
+  }, [activeVideoIndex, goToVideo]);
+
   /* ── Directional slide variants ─────────── */
   const photoSlideVariants = {
     enter: (dir) => ({
@@ -625,7 +634,7 @@ function App() {
                 <video
                   ref={videoRef}
                   key={activeVideo.src}
-                  className={styles.videoPlayer}
+                  className={`${styles.videoPlayer} ${activeVideo.landscape ? styles.videoPlayerRotated : ''}`}
                   autoPlay
                   muted
                   playsInline
@@ -633,6 +642,7 @@ function App() {
                   poster={activeVideo.poster}
                   aria-label={activeVideo.label}
                   onEnded={handleVideoEnded}
+                  onTimeUpdate={handleVideoTimeUpdate}
                 >
                   <source src={activeVideo.src} />
                   Your browser does not support the video tag.

@@ -318,7 +318,20 @@
   overflow: hidden;
 }
 
-.slideImage,
+.slideImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: clamp(1.45rem, 3vw, 2.5rem);
+  background: transparent;
+  box-shadow: none;
+  object-fit: contain;
+  object-position: center center;
+  filter: saturate(1.02) contrast(1.02);
+  transition: transform 0.4s ease-out;
+}
+
 .videoPlayer {
   display: block;
   width: 100%;
@@ -328,12 +341,7 @@
   background: transparent;
   box-shadow: none;
   object-fit: cover;
-  object-position: center top;
-}
-
-.slideImage {
-  filter: saturate(1.02) contrast(1.02);
-  transition: transform 0.4s ease-out;
+  object-position: center center;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -508,12 +516,6 @@
   aspect-ratio: 9 / 16;
 }
 
-.videoStageLandscape {
-  width: min(100%, 680px);
-  max-height: min(60vh, 520px);
-  aspect-ratio: 16 / 9;
-}
-
 .videoStage .slideFigure {
   padding: 0;
 }
@@ -532,6 +534,35 @@
 .videoPlayer {
   object-fit: cover;
   object-position: center center;
+}
+
+/* Rotate a portrait-encoded landscape video so it displays correctly.
+   Default: portrait 9:16 container. */
+.videoPlayerRotated {
+  position: absolute;
+  width: 177.78%; /* 100% × (16/9) — fills rotated span in 9:16 container */
+  height: 56.25%; /* 100% × (9/16) */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-90deg);
+  border-radius: clamp(1.45rem, 3vw, 2.5rem);
+  object-fit: cover;
+  object-position: center center;
+}
+
+/* Landscape container: switch to 16:9 and recalculate rotated video dims.
+   In a 16:9 box (W × W×9/16), after rotate(-90deg):
+   - visual width  = CSS height = W     → height: (W / W×9/16)×100% = 177.78%
+   - visual height = CSS width  = W×9/16 → width: 56.25%               */
+.videoStageLandscape {
+  width: min(100%, 680px);
+  max-height: min(60vh, 520px);
+  aspect-ratio: 16 / 9;
+}
+
+.videoStageLandscape .videoPlayerRotated {
+  width: 56.25%;    /* = 9/16 of container width = container height */
+  height: 177.78%;  /* = 16/9 of container height = container width */
 }
 
 /* ── Video title navigator ── */
@@ -779,6 +810,7 @@
 
   .videoStageLandscape {
     width: min(100%, 560px);
+    max-height: min(50vh, 380px);
     aspect-ratio: 16 / 9;
   }
 
@@ -862,10 +894,11 @@
   }
 
   .videoStageLandscape {
-    width: min(100%, 100%);
+    width: 100%;
+    max-height: 45svh;
     aspect-ratio: 16 / 9;
-    max-height: 50svh;
   }
+
 
   .videoStage .slideCaption {
     flex-direction: row;
