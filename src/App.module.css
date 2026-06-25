@@ -264,15 +264,19 @@
 }
 
 .slideshow {
-  width: min(100%, 640px);
+  display: grid;
+  gap: 1rem;
+  width: min(100%, 780px);
   margin: 0 auto;
 }
 
-.slideStage {
+.photoCard {
   position: relative;
   isolation: isolate;
   display: grid;
   overflow: hidden;
+  gap: 1rem;
+  padding: clamp(0.85rem, 2vw, 1.15rem);
   border: 1px solid rgba(226, 212, 247, 0.2);
   border-radius: clamp(1.45rem, 3vw, 2.5rem);
   background:
@@ -281,13 +285,12 @@
   box-shadow:
     inset 0 0 46px rgba(226, 212, 247, 0.08),
     0 32px 92px rgba(0, 0, 0, 0.45);
-  aspect-ratio: 4 / 5;
 }
 
-.slideStage::before {
+.photoCard::before {
   position: absolute;
   inset: 0.65rem;
-  z-index: 3;
+  z-index: 0;
   content: '';
   pointer-events: none;
   border: 1px solid rgba(245, 240, 255, 0.08);
@@ -295,59 +298,84 @@
   box-shadow: inset 0 0 36px rgba(201, 184, 232, 0.07);
 }
 
-.slideBackdrop {
-  position: absolute;
-  inset: -12%;
-  z-index: -1;
-  width: 124%;
-  height: 124%;
-  object-fit: cover;
-  filter: blur(34px) saturate(1.08) brightness(0.65);
-  transform: scale(1.04);
-  /* opacity is driven by framer-motion AnimatePresence */
-}
-
-.slideFigure {
-  position: absolute;
-  inset: 0;
+.photoCanvas {
+  position: relative;
   z-index: 1;
+  isolation: isolate;
   display: grid;
-  margin: 0;
-  padding: 0;
   place-items: center;
   overflow: hidden;
+  min-height: min(72svh, 760px);
+  padding: clamp(0.85rem, 2vw, 1.25rem);
+  border-radius: clamp(1.1rem, 2.5vw, 1.9rem);
+  background:
+    radial-gradient(circle at 50% 22%, rgba(226, 212, 247, 0.12), transparent 44%),
+    linear-gradient(160deg, rgba(13, 10, 20, 0.2), rgba(22, 15, 42, 0.55));
 }
 
-.slideImage {
+.photoCanvas::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+  border: 1px solid rgba(245, 240, 255, 0.08);
+  border-radius: inherit;
+  box-shadow: inset 0 0 36px rgba(201, 184, 232, 0.08);
+}
+
+.photoBackdrop {
+  position: absolute;
+  inset: -10%;
+  z-index: -1;
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  filter: blur(30px) saturate(1.08) brightness(0.6);
+  transform: scale(1.08);
+}
+
+.photoImage {
+  position: relative;
+  z-index: 1;
   display: block;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(64svh, 640px);
+  margin: 0 auto;
   border: 0;
-  border-radius: clamp(1.45rem, 3vw, 2.5rem);
-  background: transparent;
-  box-shadow: none;
+  border-radius: clamp(1rem, 2vw, 1.65rem);
+  background: rgba(13, 10, 20, 0.18);
+  box-shadow:
+    0 20px 52px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(245, 240, 255, 0.06);
   object-fit: contain;
   object-position: center center;
   filter: saturate(1.02) contrast(1.02);
   transition: transform 0.4s ease-out;
 }
 
-.videoPlayer {
+.photoCaption {
+  position: relative;
+  z-index: 2;
   display: block;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  border-radius: clamp(1.45rem, 3vw, 2.5rem);
-  background: transparent;
-  box-shadow: none;
-  object-fit: cover;
-  object-position: center center;
+  margin: 0;
+  padding: clamp(0.88rem, 2vw, 1.05rem) clamp(0.95rem, 2.2vw, 1.15rem);
+  border: 1px solid rgba(226, 212, 247, 0.15);
+  border-radius: 1.15rem;
+  color: rgba(245, 240, 255, 0.95);
+  font-size: clamp(0.92rem, 1.55vw, 1.02rem);
+  font-weight: 800;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, rgba(13, 10, 20, 0.72), rgba(22, 15, 42, 0.45));
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+  text-shadow: 0 2px 18px rgba(13, 10, 20, 0.82);
+  backdrop-filter: blur(16px);
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .slideImage:hover {
-    transform: scale(1.02);
-  }
+.photoCaption span {
+  display: block;
 }
 
 .slideCaption {
@@ -383,6 +411,24 @@
   font-size: 0.68rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
+}
+
+.videoPlayer {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: clamp(1.45rem, 3vw, 2.5rem);
+  background: transparent;
+  box-shadow: none;
+  object-fit: cover;
+  object-position: center center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .photoImage:hover {
+    transform: scale(1.02);
+  }
 }
 
 /* ── Progress bar ── */
@@ -794,12 +840,24 @@
     width: min(100% - 1.25rem, 720px);
   }
 
+  .slideshow {
+    width: min(100% - 0.75rem, 720px);
+  }
+
   .heroTitle {
     font-size: clamp(4rem, 18vw, 8rem);
   }
 
   .slideStage {
     aspect-ratio: 4 / 5;
+  }
+
+  .photoCanvas {
+    min-height: min(68svh, 700px);
+  }
+
+  .photoImage {
+    max-height: min(60svh, 600px);
   }
 
   .videoStage {
@@ -812,6 +870,12 @@
     width: min(100%, 560px);
     max-height: min(50vh, 380px);
     aspect-ratio: 16 / 9;
+  }
+
+  .videoStage .slideCaption {
+    flex-direction: row;
+    align-items: center;
+    border-radius: 999px;
   }
 
   .thumbnailButton {
@@ -846,6 +910,10 @@
     bottom: 1.35rem;
   }
 
+  .slideshow {
+    width: 100%;
+  }
+
   .gallerySection {
     width: min(100% - 0.8rem, 720px);
   }
@@ -854,41 +922,32 @@
     width: min(100% - 0.4rem, 720px);
   }
 
-  .slideStage {
+  .photoCard {
+    gap: 0.85rem;
+    padding: 0.7rem;
     border-radius: 1.35rem;
-    aspect-ratio: 4 / 5;
   }
 
-  .slideStage::before {
+  .photoCard::before {
     inset: 0.45rem;
     border-radius: 1rem;
   }
 
-  .slideImage {
-    object-fit: cover;
-    object-position: var(--mobile-focus, center center);
-  }
-
-  .slideFigure,
-  .videoStage .slideFigure {
-    padding: 0;
-  }
-
-  .slideImage,
-  .videoPlayer {
-    border-radius: 1.35rem;
-  }
-
-  .slideCaption {
-    right: 0.75rem;
-    bottom: 0.75rem;
-    left: 0.75rem;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 0.72rem 0.8rem;
+  .photoCanvas {
+    min-height: min(56svh, 520px);
+    padding: 0.7rem;
     border-radius: 1rem;
-    font-size: 0.82rem;
-    line-height: 1.18;
+  }
+
+  .photoImage {
+    max-height: min(52svh, 500px);
+  }
+
+  .photoCaption {
+    padding: 0.85rem 0.9rem;
+    border-radius: 1rem;
+    font-size: 0.88rem;
+    line-height: 1.35;
   }
 
   .videoStage {
@@ -903,7 +962,6 @@
     max-height: 45svh;
     aspect-ratio: 16 / 9;
   }
-
 
   .videoStage .slideCaption {
     flex-direction: row;

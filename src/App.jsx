@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+﻿import { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import styles from './App.module.css';
 import videoFeatured from '../media/moving-memory-1-muted.mp4';
@@ -29,8 +29,8 @@ const letterParagraphs = [
   "What grounds it all though is your character. You have a quiet but unshakeable sense of who you are and what you stand for. You don't compromise on the things that matter, and you carry your values not like rules you follow but like things you actually believe in. That kind of person is rare. At any age, but especially at twenty.",
   "I'm so proud of you, Ife. Not for a specific reason, just for being you, every day, without compromise.",
   'Happy birthday. Twenty suits you perfectly.',
-  'Yours —',
-  'David 💜',
+  'Yours â€”',
+  'David ðŸ’œ',
 ];
 
 const makePoster = (label) =>
@@ -66,25 +66,25 @@ const videoPosters = {
 };
 
 const photoSlides = [
-  { image: photoArcade,    alt: 'Ifedolapo by the arcade lights',       caption: 'Main character energy', mobileFocus: '50% 38%' },
-  { image: photoSmile,     alt: 'Ifedolapo smiling brightly',           caption: 'That smile should honestly come with a warning.', mobileFocus: '50% 40%' },
+  { image: photoArcade,    alt: 'Ifedolapo by the arcade lights',       caption: 'Main character energy' },
+  { image: photoSmile,     alt: 'Ifedolapo smiling brightly',           caption: 'That smile should honestly come with a warning.' },
   { image: photoSoft,      alt: 'Black and white portrait of Ifedolapo', caption: 'Soft, calm, and completely unforgettable.' },
-  { image: photoBlue,      alt: 'Ifedolapo in blue beside greenery',    caption: 'This picture feels so peaceful.', mobileFocus: '58% 42%' },
-  { image: photoThroat,    alt: 'A playful call screenshot with Ifedolapo', caption: 'longest throat 😂', mobileFocus: '50% 78%' },
-  { image: photoBeautiful, alt: 'Ifedolapo in a cap',                   caption: 'just straight up beautiful', mobileFocus: '50% 36%' },
+  { image: photoBlue,      alt: 'Ifedolapo in blue beside greenery',    caption: 'This picture feels so peaceful.' },
+  { image: photoThroat,    alt: 'A playful call screenshot with Ifedolapo', caption: 'longest throat ðŸ˜‚' },
+  { image: photoBeautiful, alt: 'Ifedolapo in a cap',                   caption: 'just straight up beautiful' },
   { image: photoMoods,     alt: 'A collage of Ifedolapo poses',         caption: 'Every frame is a different mood.' },
   { image: photoFilm,      alt: 'Film strip style portraits of Ifedolapo', caption: 'You make random pictures look intentional.' },
-  { image: photoSun,       alt: 'Ifedolapo in sunlight',                caption: 'Sunlight did its thing here.', mobileFocus: '50% 38%' },
+  { image: photoSun,       alt: 'Ifedolapo in sunlight',                caption: 'Sunlight did its thing here.' },
   { image: photoCute,      alt: 'Close-up portrait of Ifedolapo',       caption: 'This one is just really cute.' },
-  { image: photoSexy,      alt: 'Ifedolapo in purple light',            caption: 'looking all sexy for no reasonnn', mobileFocus: '50% 40%' },
-  { image: photoLockedIn,  alt: 'Ifedolapo holding study notes',        caption: 'Pretty and locked in.', mobileFocus: '50% 44%' },
-  { image: photoCall,      alt: 'A video call screenshot with Ifedolapo', caption: 'Even a call with you feels like a memory.', mobileFocus: '50% 74%' },
+  { image: photoSexy,      alt: 'Ifedolapo in purple light',            caption: 'looking all sexy for no reasonnn' },
+  { image: photoLockedIn,  alt: 'Ifedolapo holding study notes',        caption: 'Pretty and locked in.' },
+  { image: photoCall,      alt: 'A video call screenshot with Ifedolapo', caption: 'Even a call with you feels like a memory.' },
 ];
 
 const videoSlides = [
   { src: videoFeatured, poster: videoPosters.featured, label: 'Moving Memory I',   caption: 'This one makes me smile.' },
   { src: videoSecond,   poster: videoPosters.second,   label: 'Moving Memory II',  caption: 'Just one of those moments.', landscape: true },
-  { src: videoThird,    poster: videoPosters.third,    label: 'Moving Memory III', caption: 'only God knows what you were trying to do here 😂' },
+  { src: videoThird,    poster: videoPosters.third,    label: 'Moving Memory III', caption: 'only God knows what you were trying to do here ðŸ˜‚' },
 ];
 
 const sparkles = Array.from({ length: 38 }, (_, index) => ({
@@ -107,7 +107,7 @@ const getPreviousIndex = (i, n) => (i - 1 + n) % n;
 const getNextIndex    = (i, n) => (i + 1) % n;
 const formatSlideNumber = (i) => String(i + 1).padStart(2, '0');
 
-/* ─── Arrow SVG icons ─────────────────────────────────────── */
+/* â”€â”€â”€ Arrow SVG icons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const ArrowLeft = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
     <path d="M11.5 3.5 6 9l5.5 5.5" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"/>
@@ -119,15 +119,15 @@ const ArrowRight = () => (
   </svg>
 );
 
-/* ─── Photo Progress Bar ──────────────────────────────────── */
+/* â”€â”€â”€ Photo Progress Bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const PHOTO_INTERVAL = 7500; // ms between auto-advances
 
 
 const appreciationReasons = [
-  { icon: '✨', text: 'You turn the most ordinary moments into something I never want to forget.' },
-  { icon: '🌻', text: 'Your presence alone is enough to light up any room you walk into.' },
-  { icon: '🦋', text: 'You carry yourself with a grace that is both effortless and undeniable.' },
-  { icon: '🤍', text: 'You care so genuinely about the people in your life.' },
+  { icon: 'âœ¨', text: 'You turn the most ordinary moments into something I never want to forget.' },
+  { icon: 'ðŸŒ»', text: 'Your presence alone is enough to light up any room you walk into.' },
+  { icon: 'ðŸ¦‹', text: 'You carry yourself with a grace that is both effortless and undeniable.' },
+  { icon: 'ðŸ¤', text: 'You care so genuinely about the people in your life.' },
 ];
 
 function BirthdaySparkles() {
@@ -259,26 +259,26 @@ function App() {
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
   const moonY = useTransform(scrollY, [0, 500], [0, 50]);
 
-  /* ── Photo slideshow state ──────────────── */
+  /* â”€â”€ Photo slideshow state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
   const [photoDir, setPhotoDir] = useState(1); // 1 = forward, -1 = backward
   const [photoPaused, setPhotoPaused] = useState(false);
   const [photoProgressKey, setPhotoProgressKey] = useState(0);
 
-  /* ── Video slideshow state ──────────────── */
+  /* â”€â”€ Video slideshow state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [videoDir, setVideoDir] = useState(1);
   const videoRef = useRef(null);
 
-  /* ── Thumbnail rail ref (for auto-scroll) ── */
+  /* â”€â”€ Thumbnail rail ref (for auto-scroll) â”€â”€ */
   const thumbnailRailRef = useRef(null);
   const thumbnailRefs   = useRef([]);
 
-  /* ── Touch / swipe tracking ─────────────── */
+  /* â”€â”€ Touch / swipe tracking â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const photoTouchX = useRef(null);
   const videoTouchX = useRef(null);
 
-  /* ── Photo helpers ──────────────────────── */
+  /* â”€â”€ Photo helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const goToPhoto = useCallback((index, dir = 1) => {
     setPhotoDir(dir);
     setActivePhotoIndex(index);
@@ -297,14 +297,14 @@ function App() {
     setTimeout(() => setPhotoPaused(false), 8000);
   }, [activePhotoIndex, goToPhoto]);
 
-  /* ── Photo auto-advance (progress bar drives timing) ───── */
+  /* â”€â”€ Photo auto-advance (progress bar drives timing) â”€â”€â”€â”€â”€ */
   const handlePhotoProgressComplete = useCallback(() => {
     if (!photoPaused) {
       goToPhoto(getNextIndex(activePhotoIndex, photoSlides.length), 1);
     }
   }, [photoPaused, activePhotoIndex, goToPhoto]);
 
-  /* ── Thumbnail auto-scroll ───────────────── */
+  /* â”€â”€ Thumbnail auto-scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   useEffect(() => {
     const thumb = thumbnailRefs.current[activePhotoIndex];
     const rail  = thumbnailRailRef.current;
@@ -316,7 +316,7 @@ function App() {
     rail.scrollTo({ left: scrollTo, behavior: 'smooth' });
   }, [activePhotoIndex]);
 
-  /* ── Keyboard navigation (arrow keys) ───── */
+  /* â”€â”€ Keyboard navigation (arrow keys) â”€â”€â”€â”€â”€ */
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'ArrowLeft')  { photoPrev(); }
@@ -326,7 +326,7 @@ function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [photoPrev, photoNext]);
 
-  /* ── Video helpers ──────────────────────── */
+  /* â”€â”€ Video helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const goToVideo = useCallback((index, dir = 1) => {
     setVideoDir(dir);
     setActiveVideoIndex(index);
@@ -340,12 +340,12 @@ function App() {
     goToVideo(getNextIndex(activeVideoIndex, videoSlides.length), 1);
   }, [activeVideoIndex, goToVideo]);
 
-  /* ── Video: advance when video ends ────── */
+  /* â”€â”€ Video: advance when video ends â”€â”€â”€â”€â”€â”€ */
   const handleVideoEnded = useCallback(() => {
     goToVideo(getNextIndex(activeVideoIndex, videoSlides.length), 1);
   }, [activeVideoIndex, goToVideo]);
 
-  /* ── Video 3: skip last 4 seconds ───────── */
+  /* â”€â”€ Video 3: skip last 4 seconds â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const handleVideoTimeUpdate = useCallback((e) => {
     if (activeVideoIndex !== 2) return;
     const video = e.currentTarget;
@@ -354,7 +354,7 @@ function App() {
     }
   }, [activeVideoIndex, goToVideo]);
 
-  /* ── Directional slide variants ─────────── */
+  /* â”€â”€ Directional slide variants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const photoSlideVariants = {
     enter: (dir) => ({
       opacity: 0,
@@ -401,7 +401,7 @@ function App() {
   const activePhoto = photoSlides[activePhotoIndex];
   const activeVideo = videoSlides[activeVideoIndex];
 
-  /* ── Swipe handlers ─────────────────────── */
+  /* â”€â”€ Swipe handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const onPhotoTouchStart = (e) => { photoTouchX.current = e.touches[0].clientX; };
   const onPhotoTouchEnd = (e) => {
     if (photoTouchX.current === null) return;
@@ -424,7 +424,7 @@ function App() {
       <CursorGlow />
       <BackgroundMusic />
       <main className={styles.app}>
-      {/* ── HERO ─────────────────────────────── */}
+      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className={styles.hero} aria-labelledby="hero-title">
         <motion.div className={styles.heroMoon} aria-hidden="true" style={{ y: shouldReduceMotion ? 0 : moonY }} />
         <motion.div className={styles.heroInner} style={{ y: shouldReduceMotion ? 0 : heroY }}>
@@ -479,7 +479,7 @@ function App() {
         </a>
       </section>
 
-      {/* ── PHOTO SLIDESHOW ───────────────────── */}
+      {/* â”€â”€ PHOTO SLIDESHOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <motion.section
         id="moments"
         className={`${styles.section} ${styles.gallerySection}`}
@@ -502,55 +502,56 @@ function App() {
           onMouseEnter={() => setPhotoPaused(true)}
           onMouseLeave={() => setPhotoPaused(false)}
         >
-          <div className={styles.slideStage}>
-            {/* Blurred backdrop — crossfades between slides */}
-            <AnimatePresence mode="sync">
-              <motion.img
-                key={`backdrop-${activePhotoIndex}`}
-                className={styles.slideBackdrop}
-                src={activePhoto.image}
-                alt=""
-                aria-hidden="true"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.72 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.7, ease: 'easeInOut' }}
-              />
-            </AnimatePresence>
+          <AnimatePresence mode="wait" custom={photoDir}>
+            <motion.figure
+              key={activePhotoIndex}
+              className={styles.photoCard}
+              custom={photoDir}
+              variants={photoSlideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              layout
+            >
+              {/* Progress bar */}
+              {!shouldReduceMotion && (
+                <PhotoProgressBar
+                  progressKey={photoProgressKey}
+                  paused={photoPaused}
+                  onComplete={handlePhotoProgressComplete}
+                />
+              )}
 
-            {/* Progress bar */}
-            {!shouldReduceMotion && (
-              <PhotoProgressBar
-                progressKey={photoProgressKey}
-                paused={photoPaused}
-                onComplete={handlePhotoProgressComplete}
-              />
-            )}
+              <div className={styles.photoCanvas}>
+                {/* Blurred backdrop keeps the card full even when the image is fully contained */}
+                <AnimatePresence mode="sync">
+                  <motion.img
+                    key={`backdrop-${activePhotoIndex}`}
+                    className={styles.photoBackdrop}
+                    src={activePhoto.image}
+                    alt=""
+                    aria-hidden="true"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.72 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.7, ease: 'easeInOut' }}
+                  />
+                </AnimatePresence>
 
-            <AnimatePresence mode="wait" custom={photoDir}>
-              <motion.figure
-                key={activePhotoIndex}
-                className={styles.slideFigure}
-                custom={photoDir}
-                variants={photoSlideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-              >
                 <img
-                  className={styles.slideImage}
+                  className={styles.photoImage}
                   src={activePhoto.image}
                   alt={activePhoto.alt}
-                  style={activePhoto.mobileFocus ? { '--mobile-focus': activePhoto.mobileFocus } : undefined}
                   fetchpriority={activePhotoIndex === 0 ? "high" : "auto"}
                   loading={activePhotoIndex === 0 ? "eager" : "lazy"}
                 />
-                <figcaption className={styles.slideCaption}>
-                  <span>{activePhoto.caption}</span>
-                </figcaption>
-              </motion.figure>
-            </AnimatePresence>
-          </div>
+              </div>
+
+              <figcaption className={styles.photoCaption}>
+                <span>{activePhoto.caption}</span>
+              </figcaption>
+            </motion.figure>
+          </AnimatePresence>
 
           {/* Controls */}
           <div className={styles.slideshowControls}>
@@ -607,7 +608,7 @@ function App() {
         </div>
       </motion.section>
 
-      {/* ── VIDEO SLIDESHOW ───────────────────── */}
+      {/* â”€â”€ VIDEO SLIDESHOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <motion.section
         className={`${styles.section} ${styles.videoSection}`}
         aria-labelledby="video-title"
@@ -711,7 +712,7 @@ function App() {
         </div>
       </motion.section>
 
-      {/* ── REASONS ───────────────────────────── */}
+      {/* â”€â”€ REASONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <motion.section
         className={`${styles.section}`}
         aria-labelledby="reasons-title"
@@ -738,7 +739,7 @@ function App() {
         </div>
       </motion.section>
 
-      {/* ── LETTER ────────────────────────────── */}
+      {/* â”€â”€ LETTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <motion.section
         className={`${styles.section} ${styles.letterSection}`}
         aria-labelledby="letter-title"
@@ -781,7 +782,7 @@ function App() {
         </article>
       </motion.section>
 
-      {/* ── AGE ───────────────────────────────── */}
+      {/* â”€â”€ AGE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <motion.section
         className={`${styles.section} ${styles.ageSection}`}
         aria-labelledby="age-title"
@@ -797,7 +798,7 @@ function App() {
         </p>
       </motion.section>
 
-      {/* ── FOOTER ───────────────────────────── */}
+      {/* â”€â”€ FOOTER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <footer className={styles.closing} aria-labelledby="closing-title">
         <motion.div
           className={styles.closingInner}
@@ -819,3 +820,5 @@ function App() {
 }
 
 export default App;
+
+
