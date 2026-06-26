@@ -931,26 +931,40 @@
   }
 
   .photoDeck {
-    min-height: min(52svh, 520px);
-    padding: 0.1rem;
+    min-height: min(60svh, 560px);
+    aspect-ratio: 4 / 5;
+    padding: 0.15rem;
+    align-items: stretch;
   }
 
-  .photoImage {
-    max-height: min(48svh, 460px);
+  .photoDeck::before {
+    inset: 12% 7% auto;
+    height: 64%;
+    opacity: 0.58;
   }
 
   .photoStackCard {
-    padding: 0.35rem;
+    width: 100%;
+    height: 100%;
+    padding: 0.33rem;
+  }
+
+  .photoImage {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
+    object-position: center 18%;
   }
 
   .photoStackCaption {
-    right: 0.65rem;
-    bottom: 0.65rem;
-    left: 0.65rem;
-    padding: 0.68rem 0.78rem;
+    right: 0.58rem;
+    bottom: 0.58rem;
+    left: 0.58rem;
+    padding: 0.66rem 0.72rem;
     border-radius: 0.9rem;
     font-size: 0.8rem;
-    line-height: 1.25;
+    line-height: 1.22;
   }
 
   .videoStage {

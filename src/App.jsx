@@ -268,6 +268,7 @@ function App() {
   const [photoDir, setPhotoDir] = useState(1); // 1 = forward, -1 = backward
   const [photoPaused, setPhotoPaused] = useState(false);
   const [photoProgressKey, setPhotoProgressKey] = useState(0);
+  const [compactPhotoLayout, setCompactPhotoLayout] = useState(false);
 
   /* â”€â”€ Video slideshow state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
@@ -330,6 +331,19 @@ function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [photoPrev, photoNext]);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 560px)');
+
+    const updateLayout = () => {
+      setCompactPhotoLayout(mediaQuery.matches);
+    };
+
+    updateLayout();
+    mediaQuery.addEventListener('change', updateLayout);
+
+    return () => mediaQuery.removeEventListener('change', updateLayout);
+  }, []);
+
   /* â”€â”€ Video helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const goToVideo = useCallback((index, dir = 1) => {
     setVideoDir(dir);
@@ -362,8 +376,8 @@ function App() {
   const photoSlideVariants = {
     enter: (dir) => ({
       opacity: 0,
-      x: shouldReduceMotion ? 0 : dir * 48,
-      scale: shouldReduceMotion ? 1 : 0.97,
+      x: shouldReduceMotion ? 0 : dir * (compactPhotoLayout ? 32 : 48),
+      scale: shouldReduceMotion ? 1 : (compactPhotoLayout ? 0.985 : 0.97),
       filter: shouldReduceMotion ? 'none' : 'blur(4px)',
     }),
     center: {
@@ -375,8 +389,8 @@ function App() {
     },
     exit: (dir) => ({
       opacity: 0,
-      x: shouldReduceMotion ? 0 : dir * -48,
-      scale: shouldReduceMotion ? 1 : 1.015,
+      x: shouldReduceMotion ? 0 : dir * (compactPhotoLayout ? -32 : -48),
+      scale: shouldReduceMotion ? 1 : (compactPhotoLayout ? 1.01 : 1.015),
       filter: shouldReduceMotion ? 'none' : 'blur(3px)',
       transition: { duration: 0.36, ease: [0.55, 0, 0.35, 1] },
     }),
@@ -534,18 +548,18 @@ function App() {
                       initial={{ opacity: 0, scale: isActive ? 0.94 : 0.82, y: isActive ? 10 : 26 }}
                       animate={{
                         opacity: isActive ? 1 : 0.42,
-                        x: offset * 56,
-                        y: Math.abs(offset) * 10 + (isActive ? 0 : 12),
-                        scale: isActive ? 1 : 0.9,
-                        rotate: offset * 4.25,
+                        x: offset * (compactPhotoLayout ? 34 : 56),
+                        y: Math.abs(offset) * (compactPhotoLayout ? 4 : 10) + (isActive ? 0 : (compactPhotoLayout ? 6 : 12)),
+                        scale: isActive ? 1 : (compactPhotoLayout ? 0.94 : 0.9),
+                        rotate: offset * (compactPhotoLayout ? 3 : 4.25),
                         filter: isActive ? 'none' : 'blur(1.2px) saturate(0.86)',
                       }}
                       exit={{
                         opacity: 0,
-                        x: offset * 74,
-                        y: 34,
-                        scale: 0.84,
-                        rotate: offset * 5.2,
+                        x: offset * (compactPhotoLayout ? 44 : 74),
+                        y: compactPhotoLayout ? 20 : 34,
+                        scale: compactPhotoLayout ? 0.9 : 0.84,
+                        rotate: offset * (compactPhotoLayout ? 3.4 : 5.2),
                       }}
                       transition={{ type: 'spring', stiffness: 180, damping: 24, mass: 0.78 }}
                     >
