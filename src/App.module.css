@@ -288,7 +288,6 @@
   overflow: visible;
   min-height: min(68svh, 760px);
   padding: clamp(0.15rem, 0.8vw, 0.55rem);
-  touch-action: pan-y;
 }
 
 .photoDeck::before {
@@ -334,15 +333,10 @@
 
 .photoStackCardActive {
   z-index: 30;
-  cursor: grab;
 }
 
 .photoStackCardInactive {
   pointer-events: none;
-}
-
-.photoStackCardActive:active {
-  cursor: grabbing;
 }
 
 .photoImage {
@@ -888,12 +882,6 @@
     aspect-ratio: 16 / 9;
   }
 
-  .videoStage .slideCaption {
-    flex-direction: row;
-    align-items: center;
-    border-radius: 999px;
-  }
-
   .thumbnailButton {
     flex-basis: clamp(4.4rem, 14vw, 5.8rem);
   }
@@ -976,12 +964,6 @@
     width: 100%;
     max-height: 45svh;
     aspect-ratio: 16 / 9;
-  }
-
-  .videoStage .slideCaption {
-    flex-direction: row;
-    align-items: center;
-    border-radius: 999px;
   }
 
   .slideshowControls {
