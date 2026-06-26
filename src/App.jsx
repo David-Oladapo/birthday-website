@@ -29,8 +29,8 @@ const letterParagraphs = [
   "What grounds it all though is your character. You have a quiet but unshakeable sense of who you are and what you stand for. You don't compromise on the things that matter, and you carry your values not like rules you follow but like things you actually believe in. That kind of person is rare. At any age, but especially at twenty.",
   "I'm so proud of you, Ife. Not for a specific reason, just for being you, every day, without compromise.",
   'Happy birthday. Twenty suits you perfectly.',
-  'Yours â€”',
-  'David ðŸ’œ',
+  'Yours \u2014',
+  'David \u2764\uFE0F',
 ];
 
 const makePoster = (label) =>
@@ -70,7 +70,7 @@ const photoSlides = [
   { image: photoSmile,     alt: 'Ifedolapo smiling brightly',           caption: 'That smile should honestly come with a warning.' },
   { image: photoSoft,      alt: 'Black and white portrait of Ifedolapo', caption: 'Soft, calm, and completely unforgettable.' },
   { image: photoBlue,      alt: 'Ifedolapo in blue beside greenery',    caption: 'This picture feels so peaceful.' },
-  { image: photoThroat,    alt: 'A playful call screenshot with Ifedolapo', caption: 'longest throat ðŸ˜‚' },
+  { image: photoThroat,    alt: 'A playful call screenshot with Ifedolapo', caption: 'longest throat \u{1F602}' },
   { image: photoBeautiful, alt: 'Ifedolapo in a cap',                   caption: 'just straight up beautiful' },
   { image: photoMoods,     alt: 'A collage of Ifedolapo poses',         caption: 'Every frame is a different mood.' },
   { image: photoFilm,      alt: 'Film strip style portraits of Ifedolapo', caption: 'You make random pictures look intentional.' },
@@ -84,7 +84,7 @@ const photoSlides = [
 const videoSlides = [
   { src: videoFeatured, poster: videoPosters.featured, label: 'Moving Memory I',   caption: 'This one makes me smile.' },
   { src: videoSecond,   poster: videoPosters.second,   label: 'Moving Memory II',  caption: 'Just one of those moments.', landscape: true },
-  { src: videoThird,    poster: videoPosters.third,    label: 'Moving Memory III', caption: 'only God knows what you were trying to do here ðŸ˜‚' },
+  { src: videoThird,    poster: videoPosters.third,    label: 'Moving Memory III', caption: 'only God knows what you were trying to do here \u{1F602}' },
 ];
 
 const sparkles = Array.from({ length: 38 }, (_, index) => ({
@@ -128,10 +128,10 @@ const PHOTO_INTERVAL = 7500; // ms between auto-advances
 
 
 const appreciationReasons = [
-  { icon: 'âœ¨', text: 'You turn the most ordinary moments into something I never want to forget.' },
-  { icon: 'ðŸŒ»', text: 'Your presence alone is enough to light up any room you walk into.' },
-  { icon: 'ðŸ¦‹', text: 'You carry yourself with a grace that is both effortless and undeniable.' },
-  { icon: 'ðŸ¤', text: 'You care so genuinely about the people in your life.' },
+  { icon: '\u2728', text: 'You turn the most ordinary moments into something I never want to forget.' },
+  { icon: '\u{1F33B}', text: 'Your presence alone is enough to light up any room you walk into.' },
+  { icon: '\u{1F98B}', text: 'You carry yourself with a grace that is both effortless and undeniable.' },
+  { icon: '\u{1F90D}', text: 'You care so genuinely about the people in your life.' },
 ];
 
 function BirthdaySparkles() {
@@ -273,6 +273,7 @@ function App() {
   /* â”€â”€ Video slideshow state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [videoDir, setVideoDir] = useState(1);
+  const [compactVideoLayout, setCompactVideoLayout] = useState(false);
   const videoRef = useRef(null);
 
   /* â”€â”€ Thumbnail rail ref (for auto-scroll) â”€â”€ */
@@ -344,6 +345,19 @@ function App() {
     return () => mediaQuery.removeEventListener('change', updateLayout);
   }, []);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(max-width: 560px)');
+
+    const updateLayout = () => {
+      setCompactVideoLayout(mediaQuery.matches);
+    };
+
+    updateLayout();
+    mediaQuery.addEventListener('change', updateLayout);
+
+    return () => mediaQuery.removeEventListener('change', updateLayout);
+  }, []);
+
   /* â”€â”€ Video helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const goToVideo = useCallback((index, dir = 1) => {
     setVideoDir(dir);
@@ -399,8 +413,8 @@ function App() {
   const videoSlideVariants = {
     enter: (dir) => ({
       opacity: 0,
-      y: shouldReduceMotion ? 0 : dir * 36,
-      scale: shouldReduceMotion ? 1 : 0.96,
+      y: shouldReduceMotion ? 0 : dir * (compactVideoLayout ? 28 : 36),
+      scale: shouldReduceMotion ? 1 : (compactVideoLayout ? 0.98 : 0.96),
     }),
     center: {
       opacity: 1,
@@ -410,8 +424,8 @@ function App() {
     },
     exit: (dir) => ({
       opacity: 0,
-      y: shouldReduceMotion ? 0 : dir * -36,
-      scale: shouldReduceMotion ? 1 : 1.02,
+      y: shouldReduceMotion ? 0 : dir * (compactVideoLayout ? -28 : -36),
+      scale: shouldReduceMotion ? 1 : (compactVideoLayout ? 1.01 : 1.02),
       transition: { duration: 0.32, ease: [0.55, 0, 0.35, 1] },
     }),
   };

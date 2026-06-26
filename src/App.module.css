@@ -559,6 +559,19 @@
   transform: translateY(-2px);
 }
 
+.slideStage {
+  position: relative;
+  display: grid;
+  width: 100%;
+  margin: 0 auto;
+  justify-items: center;
+}
+
+.slideStage .slideFigure {
+  width: 100%;
+  padding: 0;
+}
+
 .videoSlideshow {
   width: min(100%, 720px);
 }
@@ -871,13 +884,13 @@
   }
 
   .videoStage {
-    width: min(100%, 390px);
+    width: min(100%, 480px);
     min-height: 0;
     aspect-ratio: 9 / 16;
   }
 
   .videoStageLandscape {
-    width: min(100%, 560px);
+    width: min(100%, 620px);
     max-height: min(50vh, 380px);
     aspect-ratio: 16 / 9;
   }
@@ -968,7 +981,7 @@
   }
 
   .videoStage {
-    width: min(100%, 360px);
+    width: 100%;
     min-height: 0;
     max-height: 72svh;
     aspect-ratio: 9 / 16;
