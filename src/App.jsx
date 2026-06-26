@@ -320,7 +320,7 @@ const FluidImage = ({ src, alt, className, ...props }) => {
       className={className}
       initial={{ opacity: 0 }}
       animate={{ opacity: isLoaded ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       onLoad={() => setIsLoaded(true)}
       onError={() => setIsLoaded(true)}
       {...props}
@@ -343,7 +343,7 @@ const FluidVideo = forwardRef(({ children, className, ...props }, ref) => {
       className={className}
       initial={{ opacity: 0 }}
       animate={{ opacity: isLoaded ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
+      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       onCanPlay={() => setIsLoaded(true)}
       onLoadedData={() => setIsLoaded(true)}
       {...props}
@@ -518,7 +518,7 @@ function App() {
             className={styles.eyebrow}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={pageReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             A birthday constellation for
           </motion.p>
@@ -544,7 +544,7 @@ function App() {
             className={styles.heroSubtitle}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
             animate={pageReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-            transition={{ duration: 0.85, delay: shouldReduceMotion ? 0 : 1.15, ease: 'easeOut' }}
+            transition={{ duration: 0.85, delay: shouldReduceMotion ? 0 : 1.15, ease: [0.22, 1, 0.36, 1] }}
           >
             Twenty &amp; Timeless
           </motion.p>
