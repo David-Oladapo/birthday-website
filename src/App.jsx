@@ -109,7 +109,7 @@ const getWrappedIndex  = (i, n) => ((i % n) + n) % n;
 const getRelativeIndex = (i, delta, n) => getWrappedIndex(i + delta, n);
 const formatSlideNumber = (i) => String(i + 1).padStart(2, '0');
 
-const photoStackOffsets = [-2, -1, 0, 1];
+const photoStackOffsets = [-1, 0, 1];
 
 /* â”€â”€â”€ Arrow SVG icons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 const ArrowLeft = () => (
@@ -526,24 +526,28 @@ function App() {
                   return (
                     <motion.figure
                       key={index}
-                      className={styles.photoStackCard}
+                      className={`${styles.photoStackCard} ${
+                        isActive ? styles.photoStackCardActive : styles.photoStackCardInactive
+                      }`}
+                      aria-current={isActive}
                       style={{ zIndex: 20 - Math.abs(offset) }}
-                      initial={{ opacity: 0, scale: 0.88, y: 22 }}
+                      initial={{ opacity: 0, scale: isActive ? 0.94 : 0.82, y: isActive ? 10 : 26 }}
                       animate={{
-                        opacity: isActive ? 1 : 0.65 - Math.abs(offset) * 0.06,
-                        x: offset * 18,
-                        y: Math.abs(offset) * 14,
-                        scale: isActive ? 1 : 1 - Math.abs(offset) * 0.055,
-                        rotate: offset * 3.2,
+                        opacity: isActive ? 1 : 0.42,
+                        x: offset * 56,
+                        y: Math.abs(offset) * 10 + (isActive ? 0 : 12),
+                        scale: isActive ? 1 : 0.9,
+                        rotate: offset * 4.25,
+                        filter: isActive ? 'none' : 'blur(1.2px) saturate(0.86)',
                       }}
                       exit={{
                         opacity: 0,
-                        x: offset * 26,
+                        x: offset * 74,
                         y: 34,
-                        scale: 0.88,
-                        rotate: offset * 4,
+                        scale: 0.84,
+                        rotate: offset * 5.2,
                       }}
-                      transition={{ duration: 0.58, ease: [0.22, 1, 0.36, 1] }}
+                      transition={{ type: 'spring', stiffness: 180, damping: 24, mass: 0.78 }}
                     >
                       <img
                         className={styles.photoImage}
@@ -553,15 +557,16 @@ function App() {
                         fetchpriority={isActive ? 'high' : 'auto'}
                         loading={isActive ? 'eager' : 'lazy'}
                       />
+                      {isActive && (
+                        <figcaption className={styles.photoStackCaption}>
+                          <span>{photo.caption}</span>
+                        </figcaption>
+                      )}
                     </motion.figure>
                   );
                 })}
               </AnimatePresence>
             </div>
-
-            <figcaption className={styles.photoCaption}>
-              <span>{activePhoto.caption}</span>
-            </figcaption>
           </motion.figure>
 
           {/* Controls */}
