@@ -288,6 +288,7 @@
   overflow: visible;
   min-height: min(68svh, 760px);
   padding: clamp(0.15rem, 0.8vw, 0.55rem);
+  touch-action: pan-y;
 }
 
 .photoDeck::before {
@@ -333,10 +334,15 @@
 
 .photoStackCardActive {
   z-index: 30;
+  cursor: grab;
 }
 
 .photoStackCardInactive {
   pointer-events: none;
+}
+
+.photoStackCardActive:active {
+  cursor: grabbing;
 }
 
 .photoImage {

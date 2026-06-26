@@ -362,23 +362,23 @@ function App() {
   const photoSlideVariants = {
     enter: (dir) => ({
       opacity: 0,
-      x: shouldReduceMotion ? 0 : dir * 48,
-      scale: shouldReduceMotion ? 1 : 0.97,
-      filter: shouldReduceMotion ? 'none' : 'blur(4px)',
+      x: shouldReduceMotion ? 0 : dir * 44,
+      scale: shouldReduceMotion ? 1 : 0.94,
+      filter: shouldReduceMotion ? 'none' : 'blur(3px)',
     }),
     center: {
       opacity: 1,
       x: 0,
       scale: 1,
       filter: 'blur(0px)',
-      transition: { duration: 0.52, ease: [0.22, 1, 0.36, 1] },
+      transition: { type: 'spring', stiffness: 180, damping: 24, mass: 0.78 },
     },
     exit: (dir) => ({
       opacity: 0,
-      x: shouldReduceMotion ? 0 : dir * -48,
-      scale: shouldReduceMotion ? 1 : 1.015,
-      filter: shouldReduceMotion ? 'none' : 'blur(3px)',
-      transition: { duration: 0.36, ease: [0.55, 0, 0.35, 1] },
+      x: shouldReduceMotion ? 0 : dir * -44,
+      scale: shouldReduceMotion ? 1 : 1.01,
+      filter: shouldReduceMotion ? 'none' : 'blur(2.5px)',
+      transition: { type: 'spring', stiffness: 220, damping: 28, mass: 0.72 },
     }),
   };
 
@@ -421,6 +421,22 @@ function App() {
     if (Math.abs(delta) > 42) delta > 0 ? videoNext() : videoPrev();
     videoTouchX.current = null;
   };
+
+  const onPhotoCardDragEnd = useCallback((event, info) => {
+    if (shouldReduceMotion || photoPaused) return;
+
+    const swipeDistance = 44;
+    const swipeVelocity = 420;
+
+    if (info.offset.x <= -swipeDistance || info.velocity.x <= -swipeVelocity) {
+      photoNext();
+      return;
+    }
+
+    if (info.offset.x >= swipeDistance || info.velocity.x >= swipeVelocity) {
+      photoPrev();
+    }
+  }, [photoPaused, photoNext, photoPrev, shouldReduceMotion]);
 
   return (
     <>
@@ -531,6 +547,13 @@ function App() {
                       }`}
                       aria-current={isActive}
                       style={{ zIndex: 20 - Math.abs(offset) }}
+                      drag={isActive ? 'x' : false}
+                      dragConstraints={{ left: -80, right: 80 }}
+                      dragElastic={0.16}
+                      dragMomentum={false}
+                      onDragEnd={isActive ? onPhotoCardDragEnd : undefined}
+                      whileHover={isActive ? { scale: 1.01 } : undefined}
+                      whileTap={isActive ? { scale: 0.985 } : undefined}
                       initial={{ opacity: 0, scale: isActive ? 0.94 : 0.82, y: isActive ? 10 : 26 }}
                       animate={{
                         opacity: isActive ? 1 : 0.42,
@@ -547,7 +570,7 @@ function App() {
                         scale: 0.84,
                         rotate: offset * 5.2,
                       }}
-                      transition={{ type: 'spring', stiffness: 180, damping: 24, mass: 0.78 }}
+                      transition={{ type: 'spring', stiffness: 200, damping: 26, mass: 0.76 }}
                     >
                       <img
                         className={styles.photoImage}
