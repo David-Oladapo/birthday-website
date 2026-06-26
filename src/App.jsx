@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import styles from './App.module.css';
 import videoFeatured from '../media/moving-memory-1-muted.mp4';
@@ -257,7 +257,36 @@ function PhotoProgressBar({ paused, onComplete, progressKey }) {
 
 
 
+function AssetPreloader() {
+  return (
+    <div style={{ position: 'absolute', width: 0, height: 0, overflow: 'hidden', zIndex: -1, opacity: 0, pointerEvents: 'none' }} aria-hidden="true">
+      {videoSlides.map((v) => (
+        <video key={v.src} src={v.src} preload="auto" muted playsInline />
+      ))}
+      {photoSlides.map((p) => (
+        <img key={p.image} src={p.image} alt="" loading="eager" />
+      ))}
+    </div>
+  );
+}
+
 function App() {
+  const [isAppLoaded, setIsAppLoaded] = useState(false);
+
+  useEffect(() => {
+    const handleLoad = () => setIsAppLoaded(true);
+    if (document.readyState === 'complete') {
+      setIsAppLoaded(true);
+    } else {
+      window.addEventListener('load', handleLoad);
+    }
+    const fallbackTimer = setTimeout(() => setIsAppLoaded(true), 2500);
+    return () => {
+      window.removeEventListener('load', handleLoad);
+      clearTimeout(fallbackTimer);
+    };
+  }, []);
+
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
@@ -452,6 +481,23 @@ function App() {
 
   return (
     <>
+      <AssetPreloader />
+      <AnimatePresence>
+        {!isAppLoaded && (
+          <motion.div
+            className={styles.loadingScreen}
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+          >
+            <motion.div
+              className={styles.loadingSpinner}
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1.2, repeat: Infinity, ease: 'linear' }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       <BirthdaySparkles />
       <CursorGlow />
       <BackgroundMusic />
@@ -463,7 +509,7 @@ function App() {
           <motion.p
             className={styles.eyebrow}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isAppLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             A birthday constellation for
@@ -474,7 +520,7 @@ function App() {
               <motion.span
                 key={`${letter}-${index}`}
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 36, filter: 'blur(12px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                animate={isAppLoaded ? { opacity: 1, y: 0, filter: 'blur(0px)' } : { opacity: 0, y: 36, filter: 'blur(12px)' }}
                 transition={{
                   duration: 0.72,
                   delay: shouldReduceMotion ? 0 : 0.38 + index * 0.08,
@@ -489,7 +535,7 @@ function App() {
           <motion.p
             className={styles.heroSubtitle}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isAppLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.85, delay: shouldReduceMotion ? 0 : 1.15, ease: 'easeOut' }}
           >
             Twenty &amp; Timeless
@@ -498,7 +544,7 @@ function App() {
           <motion.p
             className={styles.heroCopy}
             initial={shouldReduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={isAppLoaded ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 1, delay: shouldReduceMotion ? 0 : 1.45 }}
           >
             A soft little universe for the warmth, wonder, and quiet magic you bring into every room.
@@ -690,7 +736,7 @@ function App() {
                   autoPlay
                   muted
                   playsInline
-                  preload="metadata"
+                  preload="auto"
                   poster={activeVideo.poster}
                   aria-label={activeVideo.label}
                   onEnded={handleVideoEnded}
