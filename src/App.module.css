@@ -14,6 +14,91 @@
   background: transparent;
 }
 
+/* ── Loading screen ── */
+.loadingScreen {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #0d0a14;
+  /* Prevent any layout shift from passing through */
+  pointer-events: all;
+}
+
+.loadingGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 45%, rgba(201, 184, 232, 0.11), transparent),
+    radial-gradient(ellipse 40% 36% at 70% 62%, rgba(114, 76, 180, 0.10), transparent);
+  pointer-events: none;
+}
+
+.loadingContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+  text-align: center;
+  user-select: none;
+}
+
+.loadingEyebrow {
+  margin: 0;
+  color: rgba(201, 184, 232, 0.72);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-size: clamp(0.62rem, 1.4vw, 0.72rem);
+  font-weight: 700;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+}
+
+.loadingTitle {
+  margin: 0;
+  color: #c9b8e8;
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(3.8rem, 14vw, 9rem);
+  font-weight: 600;
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+  text-shadow:
+    0 0 28px rgba(201, 184, 232, 0.32),
+    0 14px 60px rgba(98, 62, 164, 0.36);
+}
+
+.loadingTagline {
+  margin: 0.2rem 0 0;
+  color: rgba(226, 212, 247, 0.54);
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(1rem, 3vw, 1.55rem);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Sweeping progress line pinned to the bottom of the screen */
+.loadingBar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(201, 184, 232, 0.42) 20%,
+    rgba(226, 212, 247, 0.92) 60%,
+    rgba(200, 169, 110, 0.6) 85%,
+    transparent 100%
+  );
+  transform-origin: left;
+}
+
 .sparkleField {
   position: fixed;
   inset: 0;

@@ -19,6 +19,52 @@ import photoLockedIn from '../media/IMG_4049.jpeg';
 import photoCall from '../media/IMG_4117.png';
 import backgroundMusic from '../media/music/Moavii - Silhouette (freetouse.com).mp3';
 
+/* ─── usePageReady ────────────────────────────────────────────────────────────
+ * Resolves true once the browser's window load event fires (all subresources
+ * complete) or a graceful fallback timeout expires.  A critical image src can
+ * be supplied; if so we additionally wait for its decode() promise so the hero
+ * image never flashes in after the curtain lifts.
+ * ──────────────────────────────────────────────────────────────────────────── */
+function usePageReady({ criticalSrc, fallbackMs = 3000 } = {}) {
+  const [ready, setReady] = useState(
+    () => document.readyState === 'complete'
+  );
+
+  useEffect(() => {
+    if (ready) return; // already ready on mount (fast repeat visits)
+
+    let cancelled = false;
+
+    const markReady = () => {
+      if (!cancelled) setReady(true);
+    };
+
+    // Primary signal: window load
+    const onLoad = () => {
+      if (criticalSrc) {
+        const img = new Image();
+        img.src = criticalSrc;
+        img.decode().then(markReady).catch(markReady); // decode() or fallback
+      } else {
+        markReady();
+      }
+    };
+
+    window.addEventListener('load', onLoad, { once: true });
+
+    // Safety net: never block for longer than fallbackMs
+    const timer = setTimeout(markReady, fallbackMs);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener('load', onLoad);
+      clearTimeout(timer);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return ready;
+}
+
 const nameLetters = 'Ifedolapo'.split('');
 
 const letterParagraphs = [
@@ -133,41 +179,6 @@ const appreciationReasons = [
   { icon: '\u{1F98B}', text: 'You carry yourself with a grace that is both effortless and undeniable.' },
   { icon: '\u{1F90D}', text: 'You care so genuinely about the people in your life.' },
 ];
-
-/* ─── Fluid Media Components ─── */
-const FluidImage = ({ src, alt, className, ...props }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  return (
-    <motion.img
-      src={src}
-      alt={alt}
-      className={className}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isLoaded ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      onLoad={() => setIsLoaded(true)}
-      onError={() => setIsLoaded(true)}
-      {...props}
-    />
-  );
-};
-
-const FluidVideo = forwardRef(({ children, className, ...props }, ref) => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  return (
-    <motion.video
-      ref={ref}
-      className={className}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isLoaded ? 1 : 0 }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      onCanPlay={() => setIsLoaded(true)}
-      {...props}
-    >
-      {children}
-    </motion.video>
-  );
-});
 
 function BirthdaySparkles() {
   return (
@@ -291,6 +302,9 @@ function PhotoProgressBar({ paused, onComplete, progressKey }) {
 }
 
 function App() {
+  /* Gate hero animations until the page is fully loaded */
+  const pageReady = usePageReady({ criticalSrc: photoSlides[0].image });
+
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
@@ -438,6 +452,9 @@ function App() {
 
   return (
     <>
+      <AnimatePresence>
+        {!pageReady && <LoadingScreen />}
+      </AnimatePresence>
       <BirthdaySparkles />
       <CursorGlow />
       <BackgroundMusic />
@@ -448,7 +465,7 @@ function App() {
           <motion.p
             className={styles.eyebrow}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={pageReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
           >
             A birthday constellation for
@@ -459,7 +476,7 @@ function App() {
               <motion.span
                 key={`${letter}-${index}`}
                 initial={shouldReduceMotion ? false : { opacity: 0, y: 36, filter: 'blur(12px)' }}
-                animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                animate={pageReady ? { opacity: 1, y: 0, filter: 'blur(0px)' } : { opacity: 0, y: 36, filter: 'blur(12px)' }}
                 transition={{
                   duration: 0.72,
                   delay: shouldReduceMotion ? 0 : 0.38 + index * 0.08,
@@ -474,7 +491,7 @@ function App() {
           <motion.p
             className={styles.heroSubtitle}
             initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={pageReady ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.85, delay: shouldReduceMotion ? 0 : 1.15, ease: 'easeOut' }}
           >
             Twenty &amp; Timeless
@@ -483,7 +500,7 @@ function App() {
           <motion.p
             className={styles.heroCopy}
             initial={shouldReduceMotion ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={pageReady ? { opacity: 1 } : { opacity: 0 }}
             transition={{ duration: 1, delay: shouldReduceMotion ? 0 : 1.45 }}
           >
             A soft little universe for the warmth, wonder, and quiet magic you bring into every room.
@@ -673,7 +690,7 @@ function App() {
                   autoPlay
                   muted
                   playsInline
-                  preload="metadata"
+                  preload="auto"
                   poster={activeVideo.poster}
                   aria-label={activeVideo.label}
                   onEnded={handleVideoEnded}
