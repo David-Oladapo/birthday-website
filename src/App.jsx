@@ -301,6 +301,58 @@ function PhotoProgressBar({ paused, onComplete, progressKey }) {
   );
 }
 
+/* ─── Fluid Media Components ─── */
+const FluidImage = ({ src, alt, className, ...props }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const imgRef = useRef(null);
+
+  useEffect(() => {
+    if (imgRef.current && imgRef.current.complete) {
+      setIsLoaded(true);
+    }
+  }, [src]);
+
+  return (
+    <motion.img
+      ref={imgRef}
+      src={src}
+      alt={alt}
+      className={className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isLoaded ? 1 : 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      onLoad={() => setIsLoaded(true)}
+      onError={() => setIsLoaded(true)}
+      {...props}
+    />
+  );
+};
+
+const FluidVideo = forwardRef(({ children, className, ...props }, ref) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  useEffect(() => {
+    if (ref && ref.current && ref.current.readyState >= 3) {
+      setIsLoaded(true);
+    }
+  }, [ref]);
+
+  return (
+    <motion.video
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isLoaded ? 1 : 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      onCanPlay={() => setIsLoaded(true)}
+      onLoadedData={() => setIsLoaded(true)}
+      {...props}
+    >
+      {children}
+    </motion.video>
+  );
+});
+
 function App() {
   /* Gate hero animations until the page is fully loaded */
   const pageReady = usePageReady({ criticalSrc: photoSlides[0].image });
