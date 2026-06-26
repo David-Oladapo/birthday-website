@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, forwardRef } from 'react';
 import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import styles from './App.module.css';
 import videoFeatured from '../media/moving-memory-1-muted.mp4';
@@ -134,6 +134,41 @@ const appreciationReasons = [
   { icon: '\u{1F90D}', text: 'You care so genuinely about the people in your life.' },
 ];
 
+/* ─── Fluid Media Components ─── */
+const FluidImage = ({ src, alt, className, ...props }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  return (
+    <motion.img
+      src={src}
+      alt={alt}
+      className={className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isLoaded ? 1 : 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      onLoad={() => setIsLoaded(true)}
+      onError={() => setIsLoaded(true)}
+      {...props}
+    />
+  );
+};
+
+const FluidVideo = forwardRef(({ children, className, ...props }, ref) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  return (
+    <motion.video
+      ref={ref}
+      className={className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isLoaded ? 1 : 0 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+      onCanPlay={() => setIsLoaded(true)}
+      {...props}
+    >
+      {children}
+    </motion.video>
+  );
+});
+
 function BirthdaySparkles() {
   return (
     <div className={styles.sparkleField} aria-hidden="true">
@@ -255,36 +290,29 @@ function PhotoProgressBar({ paused, onComplete, progressKey }) {
   );
 }
 
-
-
 function App() {
   const shouldReduceMotion = useReducedMotion();
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
   const moonY = useTransform(scrollY, [0, 500], [0, 50]);
 
-  /* â”€â”€ Photo slideshow state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
-  const [photoDir, setPhotoDir] = useState(1); // 1 = forward, -1 = backward
+  const [photoDir, setPhotoDir] = useState(1);
   const [photoPaused, setPhotoPaused] = useState(false);
   const [photoProgressKey, setPhotoProgressKey] = useState(0);
   const [compactPhotoLayout, setCompactPhotoLayout] = useState(false);
 
-  /* â”€â”€ Video slideshow state â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const [activeVideoIndex, setActiveVideoIndex] = useState(0);
   const [videoDir, setVideoDir] = useState(1);
   const [compactVideoLayout, setCompactVideoLayout] = useState(false);
   const videoRef = useRef(null);
 
-  /* â”€â”€ Thumbnail rail ref (for auto-scroll) â”€â”€ */
   const thumbnailRailRef = useRef(null);
   const thumbnailRefs   = useRef([]);
 
-  /* â”€â”€ Touch / swipe tracking â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const photoTouchX = useRef(null);
   const videoTouchX = useRef(null);
 
-  /* â”€â”€ Photo helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const goToPhoto = useCallback((index, dir = 1) => {
     setPhotoDir(dir);
     setActivePhotoIndex(index);
@@ -303,14 +331,12 @@ function App() {
     setTimeout(() => setPhotoPaused(false), 8000);
   }, [activePhotoIndex, goToPhoto]);
 
-  /* â”€â”€ Photo auto-advance (progress bar drives timing) â”€â”€â”€â”€â”€ */
   const handlePhotoProgressComplete = useCallback(() => {
     if (!photoPaused) {
       goToPhoto(getNextIndex(activePhotoIndex, photoSlides.length), 1);
     }
   }, [photoPaused, activePhotoIndex, goToPhoto]);
 
-  /* â”€â”€ Thumbnail auto-scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   useEffect(() => {
     const thumb = thumbnailRefs.current[activePhotoIndex];
     const rail  = thumbnailRailRef.current;
@@ -322,7 +348,6 @@ function App() {
     rail.scrollTo({ left: scrollTo, behavior: 'smooth' });
   }, [activePhotoIndex]);
 
-  /* â”€â”€ Keyboard navigation (arrow keys) â”€â”€â”€â”€â”€ */
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === 'ArrowLeft')  { photoPrev(); }
@@ -334,31 +359,20 @@ function App() {
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 560px)');
-
-    const updateLayout = () => {
-      setCompactPhotoLayout(mediaQuery.matches);
-    };
-
+    const updateLayout = () => { setCompactPhotoLayout(mediaQuery.matches); };
     updateLayout();
     mediaQuery.addEventListener('change', updateLayout);
-
     return () => mediaQuery.removeEventListener('change', updateLayout);
   }, []);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia('(max-width: 560px)');
-
-    const updateLayout = () => {
-      setCompactVideoLayout(mediaQuery.matches);
-    };
-
+    const updateLayout = () => { setCompactVideoLayout(mediaQuery.matches); };
     updateLayout();
     mediaQuery.addEventListener('change', updateLayout);
-
     return () => mediaQuery.removeEventListener('change', updateLayout);
   }, []);
 
-  /* â”€â”€ Video helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const goToVideo = useCallback((index, dir = 1) => {
     setVideoDir(dir);
     setActiveVideoIndex(index);
@@ -372,12 +386,10 @@ function App() {
     goToVideo(getNextIndex(activeVideoIndex, videoSlides.length), 1);
   }, [activeVideoIndex, goToVideo]);
 
-  /* â”€â”€ Video: advance when video ends â”€â”€â”€â”€â”€â”€ */
   const handleVideoEnded = useCallback(() => {
     goToVideo(getNextIndex(activeVideoIndex, videoSlides.length), 1);
   }, [activeVideoIndex, goToVideo]);
 
-  /* â”€â”€ Video 3: skip last 4 seconds â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const handleVideoTimeUpdate = useCallback((e) => {
     if (activeVideoIndex !== 2) return;
     const video = e.currentTarget;
@@ -385,30 +397,6 @@ function App() {
       goToVideo(getNextIndex(activeVideoIndex, videoSlides.length), 1);
     }
   }, [activeVideoIndex, goToVideo]);
-
-  /* â”€â”€ Directional slide variants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
-  const photoSlideVariants = {
-    enter: (dir) => ({
-      opacity: 0,
-      x: shouldReduceMotion ? 0 : dir * (compactPhotoLayout ? 32 : 48),
-      scale: shouldReduceMotion ? 1 : (compactPhotoLayout ? 0.985 : 0.97),
-      filter: shouldReduceMotion ? 'none' : 'blur(4px)',
-    }),
-    center: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      filter: 'blur(0px)',
-      transition: { duration: 0.52, ease: [0.22, 1, 0.36, 1] },
-    },
-    exit: (dir) => ({
-      opacity: 0,
-      x: shouldReduceMotion ? 0 : dir * (compactPhotoLayout ? -32 : -48),
-      scale: shouldReduceMotion ? 1 : (compactPhotoLayout ? 1.01 : 1.015),
-      filter: shouldReduceMotion ? 'none' : 'blur(3px)',
-      transition: { duration: 0.36, ease: [0.55, 0, 0.35, 1] },
-    }),
-  };
 
   const videoSlideVariants = {
     enter: (dir) => ({
@@ -430,10 +418,8 @@ function App() {
     }),
   };
 
-  const activePhoto = photoSlides[activePhotoIndex];
   const activeVideo = videoSlides[activeVideoIndex];
 
-  /* â”€â”€ Swipe handlers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   const onPhotoTouchStart = (e) => { photoTouchX.current = e.touches[0].clientX; };
   const onPhotoTouchEnd = (e) => {
     if (photoTouchX.current === null) return;
@@ -456,7 +442,6 @@ function App() {
       <CursorGlow />
       <BackgroundMusic />
       <main className={styles.app}>
-      {/* â”€â”€ HERO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <section className={styles.hero} aria-labelledby="hero-title">
         <motion.div className={styles.heroMoon} aria-hidden="true" style={{ y: shouldReduceMotion ? 0 : moonY }} />
         <motion.div className={styles.heroInner} style={{ y: shouldReduceMotion ? 0 : heroY }}>
@@ -511,7 +496,6 @@ function App() {
         </a>
       </section>
 
-      {/* â”€â”€ PHOTO SLIDESHOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */}
       <motion.section
         id="moments"
         className={`${styles.section} ${styles.gallerySection}`}
@@ -535,7 +519,6 @@ function App() {
           onMouseLeave={() => setPhotoPaused(false)}
         >
           <motion.figure className={styles.photoCard} layout>
-            {/* Progress bar */}
             {!shouldReduceMotion && (
               <PhotoProgressBar
                 progressKey={photoProgressKey}
@@ -577,7 +560,7 @@ function App() {
                       }}
                       transition={{ type: 'spring', stiffness: 180, damping: 24, mass: 0.78 }}
                     >
-                      <img
+                      <FluidImage
                         className={styles.photoImage}
                         src={photo.image}
                         alt={isActive ? photo.alt : ''}
@@ -645,7 +628,7 @@ function App() {
                 aria-label={`Show photo ${index + 1}`}
                 aria-current={index === activePhotoIndex}
               >
-                <img src={photo.image} alt="" loading="lazy" width="80" height="80" />
+                <FluidImage src={photo.image} alt="" loading="lazy" width="80" height="80" />
               </button>
             ))}
           </div>
@@ -683,7 +666,7 @@ function App() {
                 animate="center"
                 exit="exit"
               >
-                <video
+                <FluidVideo
                   ref={videoRef}
                   key={activeVideo.src}
                   className={`${styles.videoPlayer} ${activeVideo.landscape ? styles.videoPlayerRotated : ''}`}
@@ -698,7 +681,7 @@ function App() {
                 >
                   <source src={activeVideo.src} />
                   Your browser does not support the video tag.
-                </video>
+                </FluidVideo>
                 <figcaption className={styles.slideCaption}>
                   <span>{activeVideo.caption}</span>
                 </figcaption>
@@ -795,22 +778,14 @@ function App() {
         </div>
 
         <article className={styles.letterCard}>
-          <motion.div
-            className={styles.letterText}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-10%" }}
-            variants={{
-              visible: { transition: { staggerChildren: 0.8 } }
-            }}
-          >
+          <div className={styles.letterText}>
             {letterParagraphs.map((paragraph, index) => (
               <motion.p
                 key={paragraph}
-                variants={{
-                  hidden: { opacity: 0, y: 10 },
-                  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-                }}
+                initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
+                whileInView={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
                 className={
                   index === 0
                     ? styles.salutation
@@ -822,7 +797,7 @@ function App() {
                 {paragraph}
               </motion.p>
             ))}
-          </motion.div>
+          </div>
         </article>
       </motion.section>
 
